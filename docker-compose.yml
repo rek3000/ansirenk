@@ -1,0 +1,63 @@
+networks:
+  slavery:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.111.0/24
+
+services:
+  managed1:
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/managed.dockerfile
+    environment:
+      PASSWORD: "${MANAGED1_PASSWD}"
+    networks:
+      slavery:
+        ipv4_address: 192.168.111.3
+  managed2:
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/managed.dockerfile
+    environment:
+      PASSWORD: "${MANAGED2_PASSWD}"
+    networks:
+      slavery:
+        ipv4_address: 192.168.111.4
+  managed3:
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/managed.dockerfile
+    environment:
+      PASSWORD: "${MANAGED3_PASSWD}"
+    networks:
+      slavery:
+        ipv4_address: 192.168.111.5
+  master:
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/master.dockerfile
+    environment:
+      MANAGED1_PASSWD: "${MANAGED1_PASSWD}"
+      MANAGED2_PASSWD: "${MANAGED2_PASSWD}"
+      MANAGED3_PASSWD: "${MANAGED3_PASSWD}"
+    networks:
+      slavery:
+        ipv4_address: 192.168.111.2
+    depends_on:
+        - managed1
+        - managed2
+        - managed3
+

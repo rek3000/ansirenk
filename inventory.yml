@@ -1,0 +1,11 @@
+managed:
+  children:
+    webservers:
+      hosts:
+        192.168.111.3:
+    db:
+      hosts:
+        192.168.111.4:
+        192.168.111.5:
+  vars:
+    ansible_ssh_private_key_file: ~/.ssh/master
