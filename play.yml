@@ -1,0 +1,21 @@
+- name: Update webservers
+  hosts: webservers
+
+  tasks:
+  - name: Ensure Nginx is installed with the latest version
+    ansible.builtin.apt:
+      name: nginx
+      state: latest
+
+- name: Update database
+  hosts: db
+
+  tasks:
+  - name: Ensure mysql is at the latest version
+    ansible.builtin.apt:
+      name: mongodb
+      state: latest
+  - name: Ensure that mysql is started
+    ansible.builtin.service:
+      name: mongodb
+      state: started
